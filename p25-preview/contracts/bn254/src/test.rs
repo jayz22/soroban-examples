@@ -1,7 +1,7 @@
 #![cfg(test)]
 extern crate std;
 
-use soroban_sdk::{crypto::bn254, vec, Env, U256};
+use soroban_sdk::{vec, BytesN, Env, U256};
 use std::ops::Add;
 
 use crate::{Contract, ContractClient, MockProof};
@@ -25,16 +25,13 @@ fn test_add_and_mul() {
         .serialize_uncompressed(&mut a_bytes[..])
         .unwrap();
 
-    std::println!("{}", hex::encode(a_bytes)); 
-
-    let a_bn254 = bn254::G1Affine::from_array(&env, &a_bytes);
-
-    let scalar: bn254::Fr = U256::from_u32(&env, 2).into();
+    let a_bytesn = BytesN::from_array(&env, &a_bytes);
+    let scalar = U256::from_u32(&env, 2);
 
     // G + G = 2G
     assert_eq!(
-        client.g1_add(&a_bn254, &a_bn254),
-        client.g1_mul(&a_bn254, &scalar)
+        client.g1_add(&a_bytesn, &a_bytesn),
+        client.g1_mul(&a_bytesn, &scalar)
     );
 }
 
@@ -71,15 +68,15 @@ fn test_pairing() {
     let proof = MockProof {
         g1: vec![
             &env,
-            bn254::G1Affine::from_array(&env, &neg_p_bytes),
-            bn254::G1Affine::from_array(&env, &p_bytes),
-            bn254::G1Affine::from_array(&env, &p_bytes),
+            BytesN::from_array(&env, &neg_p_bytes),
+            BytesN::from_array(&env, &p_bytes),
+            BytesN::from_array(&env, &p_bytes),
         ],
         g2: vec![
             &env,
-            bn254::G2Affine::from_array(&env, &q_plus_r_bytes),
-            bn254::G2Affine::from_array(&env, &q_bytes),
-            bn254::G2Affine::from_array(&env, &r_bytes),
+            BytesN::from_array(&env, &q_plus_r_bytes),
+            BytesN::from_array(&env, &q_bytes),
+            BytesN::from_array(&env, &r_bytes),
         ],
     };
 
