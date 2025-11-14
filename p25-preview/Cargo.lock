@@ -1118,6 +1118,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "poseidon"
+version = "0.0.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
 name = "powerfmt"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1513,7 +1520,7 @@ dependencies = [
 [[package]]
 name = "soroban-ledger-snapshot"
 version = "23.1.0"
-source = "git+https://github.com/stellar/rs-soroban-sdk?rev=3cf10a984dba03f68b4f2ed653b715063e983bba#3cf10a984dba03f68b4f2ed653b715063e983bba"
+source = "git+https://github.com/stellar/rs-soroban-sdk?rev=eb829477e1bcd6305048d6715233598783d8b915#eb829477e1bcd6305048d6715233598783d8b915"
 dependencies = [
  "serde",
  "serde_json",
@@ -1526,7 +1533,7 @@ dependencies = [
 [[package]]
 name = "soroban-sdk"
 version = "23.1.0"
-source = "git+https://github.com/stellar/rs-soroban-sdk?rev=3cf10a984dba03f68b4f2ed653b715063e983bba#3cf10a984dba03f68b4f2ed653b715063e983bba"
+source = "git+https://github.com/stellar/rs-soroban-sdk?rev=eb829477e1bcd6305048d6715233598783d8b915#eb829477e1bcd6305048d6715233598783d8b915"
 dependencies = [
  "arbitrary",
  "bytes-lit",
@@ -1548,7 +1555,7 @@ dependencies = [
 [[package]]
 name = "soroban-sdk-macros"
 version = "23.1.0"
-source = "git+https://github.com/stellar/rs-soroban-sdk?rev=3cf10a984dba03f68b4f2ed653b715063e983bba#3cf10a984dba03f68b4f2ed653b715063e983bba"
+source = "git+https://github.com/stellar/rs-soroban-sdk?rev=eb829477e1bcd6305048d6715233598783d8b915#eb829477e1bcd6305048d6715233598783d8b915"
 dependencies = [
  "darling 0.20.11",
  "heck",
@@ -1567,7 +1574,7 @@ dependencies = [
 [[package]]
 name = "soroban-spec"
 version = "23.1.0"
-source = "git+https://github.com/stellar/rs-soroban-sdk?rev=3cf10a984dba03f68b4f2ed653b715063e983bba#3cf10a984dba03f68b4f2ed653b715063e983bba"
+source = "git+https://github.com/stellar/rs-soroban-sdk?rev=eb829477e1bcd6305048d6715233598783d8b915#eb829477e1bcd6305048d6715233598783d8b915"
 dependencies = [
  "base64",
  "stellar-xdr",
@@ -1578,7 +1585,7 @@ dependencies = [
 [[package]]
 name = "soroban-spec-rust"
 version = "23.1.0"
-source = "git+https://github.com/stellar/rs-soroban-sdk?rev=3cf10a984dba03f68b4f2ed653b715063e983bba#3cf10a984dba03f68b4f2ed653b715063e983bba"
+source = "git+https://github.com/stellar/rs-soroban-sdk?rev=eb829477e1bcd6305048d6715233598783d8b915#eb829477e1bcd6305048d6715233598783d8b915"
 dependencies = [
  "prettyplease",
  "proc-macro2",

@@ -1,11 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
-  "contracts/*",
+  "contracts/bn254",
+  "contracts/poseidon",
 ]
 
 [workspace.dependencies]
-soroban-sdk = { git = "https://github.com/stellar/rs-soroban-sdk", rev = "3cf10a984dba03f68b4f2ed653b715063e983bba" }
+soroban-sdk = { git = "https://github.com/stellar/rs-soroban-sdk", rev = "eb829477e1bcd6305048d6715233598783d8b915" }
 
 [profile.release]
 opt-level = "z"

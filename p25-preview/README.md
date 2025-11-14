@@ -1,6 +1,8 @@
 # P25 Preview Examples
 
-This example demonstrates how to use P25 preview features in Soroban smart contracts, including bn254 and Poseidon (soon to come).
+This repository demonstrates how to use Protocol 25 preview features in Soroban smart contracts, including:
+- **BN254 elliptic curve operations** (point addition, scalar multiplication, pairing checks)
+- **Poseidon and Poseidon2 hash functions**
 
 ## Project Structure
 
@@ -8,9 +10,14 @@ This repository uses the recommended structure for a Soroban project:
 ```text
 .
 ├── contracts
-│   └── bn254
+│   ├── bn254
+│   │   ├── src
+│   │   │   ├── lib.rs    # BN254 contract implementation
+│   │   │   └── test.rs   # Unit tests
+│   │   └── Cargo.toml
+│   └── poseidon
 │       ├── src
-│       │   ├── lib.rs    # Contract implementation
+│       │   ├── lib.rs    # Poseidon contract implementation
 │       │   └── test.rs   # Unit tests
 │       └── Cargo.toml
 ├── Cargo.toml
@@ -27,41 +34,63 @@ This guide covers:
 - Creating and funding accounts
 - Deploying contracts
 
-## Building the Contract
+## Building the Contracts
 
-Build the contract from the `contracts/bn254` directory:
+Build all contracts from the workspace root:
+
+```bash
+cargo build --workspace --target wasm32v1-none --release
+```
+
+Or build individual contracts:
 
 ```bash
 cd contracts/bn254
 make build
-```
 
-Or using cargo directly:
-
-```bash
-cargo build --target wasm32v1-none --release
+cd contracts/poseidon
+make build
 ```
 
 ## Running Tests
 
-Run the unit tests:
+Run all tests:
+
+```bash
+cargo test --workspace
+```
+
+Or test individual contracts:
 
 ```bash
 cd contracts/bn254
 cargo test
+
+cd contracts/poseidon
+cargo test
 ```
 
-## Deploying the Contract
+## Deploying the Contracts
 
-After following the Protocol 25 setup guide, deploy the contract:
+After following the Protocol 25 setup guide, deploy the contracts:
 
 ```bash
+# Deploy BN254 contract
 stellar contract deploy \
   --wasm target/wasm32v1-none/release/bn254.wasm \
   --alias bn254
+
+# Deploy Poseidon contract
+stellar contract deploy \
+  --wasm target/wasm32v1-none/release/poseidon.wasm \
+  --alias poseidon
 ```
 
-## Invoking Contract Functions
+---
+
+## BN254 Contract
+
+### Invoking BN254 Functions
 
 Here's an example of invoking the `g1_add` function, which adds two G1 points on the BN254 curve:
 
@@ -71,11 +100,49 @@ stellar contract invoke --id bn254 -- g1_add \
   --b 9a8bcafe92edd791297fee8ae890df72d075e6a8b37a3d9e474dda75a936be02d7128504ee96b037c076b9a283511bdc82e5b826c08fad6cbd18e941f2fc5ca8
 ```
 
-The function takes two parameters:
+**Parameters:**
 - `a`: BytesN<64> - First G1 point (uncompressed, 64 bytes)
 - `b`: BytesN<64> - Second G1 point (uncompressed, 64 bytes)
 
-And returns BytesN<64> - The sum of the two points.
+**Returns:** BytesN<64> - The sum of the two points
+
+---
+
+## Poseidon Contract
+
+The Poseidon contract provides two hash functions optimized for zero-knowledge proof systems:
+- `poseidon` - Original Poseidon hash (compatible with circom/iden3)
+- `poseidon2` - Poseidon2 hash (compatible with Aztec's barretenberg)
+
+### Invoking Poseidon Hash
+
+Hash two field elements `[1, 2]`:
+
+```bash
+stellar contract invoke --id poseidon -- poseidon \
+  --inputs '[{"u256":"1"},{"u256":"2"}]'
+```
+
+**Expected output:**
+```
+"7853200120776062878684798364095072458815029376092732009249414926327459813530"
+```
+
+### Invoking Poseidon2 Hash
+```bash
+stellar contract invoke --id poseidon --source alice -- poseidon2 \
+  --inputs '["1", "2"]'
+```
+
+**Expected output:**
+```
+"1594597865669602199208529098208508950092942746041644072252494753744672355203"
+```
+
+**Parameters:**
+- `inputs`: Vec<U256> - Array of field elements to hash
+
+**Returns:** U256 - The hash output
 
 ## Encoding Rules
 
