@@ -300,3 +300,6 @@ stellar contract invoke --id poseidon --source alice -- poseidon2 \
 
 - Arguments are passed as raw bytes (`BytesN<64>`, `BytesN<128>`, `U256`) and converted to BN254 types inside the contract
 - Future versions will add spec support for BN254 types, allowing direct type passing
+
+## Reference
+- [Stellar CLI manual](https://developers.stellar.org/docs/tools/cli/stellar-cli)
