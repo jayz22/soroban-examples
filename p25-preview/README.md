@@ -64,14 +64,14 @@ Details: https://github.com/stellar/rs-soroban-sdk/blob/release/v25-preview/soro
 docker run --rm -i --name stellar -p 8000:8000 stellar/quickstart:future --futurenet
 ```
 
-**2. Configure network (temporary workaround for futurenet RPC):**
+<!-- **2. Configure network (temporary workaround for futurenet RPC):**
 ```bash
 stellar network add futurenet \
   --rpc-url http://localhost:8000/soroban/rpc \
   --network-passphrase "Test SDF Future Network ; October 2022"
-```
+``` -->
 
-**3. Verify network health:**
+**2. Verify network health:**
 ```bash
 stellar network health --network futurenet
 ```
@@ -81,7 +81,7 @@ Output:
 ℹ️  Latest ledger: 1776379
 ```
 
-**4. Create and fund account:**
+**3. Create and fund account:**
 ```bash
 stellar keys generate mykey
 stellar keys fund mykey
