@@ -168,3 +168,88 @@ fn test_poseidon_and_poseidon2_different() {
     std::println!("✓ Poseidon and Poseidon2 produce different outputs");
 }
 
+mod poseidon_contract {
+    soroban_sdk::contractimport!(file = "../../target/wasm32v1-none/release/poseidon.wasm");
+}
+
+#[test]
+fn test_poseidon_wasm_with_budget() {
+    let env = Env::default();
+    // Reset budget to unlimited for expensive WASM execution
+    env.cost_estimate().budget().reset_unlimited();
+
+    let contract_id = env.register(poseidon_contract::WASM, ());
+    let client = poseidon_contract::Client::new(&env, &contract_id);
+
+    // Input: [1, 2]
+    let inputs = vec![
+        &env,
+        U256::from_u32(&env, 1),
+        U256::from_u32(&env, 2),
+    ];
+
+    let result = client.poseidon(&inputs);
+    std::println!("Poseidon([1, 2]) = {:?}", result);
+
+    // Expected output: 7853200120776062878684798364095072458815029376092732009249414926327459813530
+    let expected = U256::from_be_bytes(
+        &env,
+        &bytesn!(
+            &env,
+            0x115cc0f5e7d690413df64c6b9662e9cf2a3617f2743245519e19607a4417189a
+        )
+        .into(),
+    );
+    assert_eq!(result, expected);
+
+    env.cost_estimate().budget().print();
+    
+    // Note: Most of the costs come from WASM execution (WasmInsnExec).
+    // The actual cryptographic operations are performed by host functions.
+}
+
+#[test]
+fn test_poseidon2_wasm_with_budget() {
+    let env = Env::default();
+    // Reset budget to unlimited for expensive WASM execution
+    env.cost_estimate().budget().reset_unlimited();
+
+    let contract_id = env.register(poseidon_contract::WASM, ());
+    let client = poseidon_contract::Client::new(&env, &contract_id);
+
+    // Input: 4 identical field elements
+    let input_value = U256::from_be_bytes(
+        &env,
+        &bytesn!(
+            &env,
+            0x9a807b615c4d3e2fa0b1c2d3e4f56789fedcba9876543210abcdef0123456789
+        )
+        .into(),
+    );
+    let inputs = vec![
+        &env,
+        input_value.clone(),
+        input_value.clone(),
+        input_value.clone(),
+        input_value,
+    ];
+
+    let result = client.poseidon2(&inputs);
+    std::println!("Poseidon2 result = {:?}", result);
+
+    // Expected output from Aztec's implementation
+    let expected = U256::from_be_bytes(
+        &env,
+        &bytesn!(
+            &env,
+            0x2f43a0f83b51a6f5fc839dea0ecec74947637802a579fa9841930a25a0bcec11
+        )
+        .into(),
+    );
+    assert_eq!(result, expected);
+
+    env.cost_estimate().budget().print();
+    
+    // Note: WASM execution is more expensive than native execution
+    // but allows the contract to run in a sandboxed environment.
+}
